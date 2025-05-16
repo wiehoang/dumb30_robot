@@ -1,0 +1,38 @@
+[1.340s] Invoking command in '/home/wie/Project/Robotics/dumb30-robot/src/robot_core': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/wie/Project/Robotics/dumb30-robot/build/robot_core/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/robot_core build --build-base /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build install --record /home/wie/Project/Robotics/dumb30-robot/build/robot_core/install.log --single-version-externally-managed install_data
+[1.745s] running egg_info
+[1.745s] creating ../../build/robot_core/robot_core.egg-info
+[1.770s] writing ../../build/robot_core/robot_core.egg-info/PKG-INFO
+[1.770s] writing dependency_links to ../../build/robot_core/robot_core.egg-info/dependency_links.txt
+[1.770s] writing requirements to ../../build/robot_core/robot_core.egg-info/requires.txt
+[1.771s] writing top-level names to ../../build/robot_core/robot_core.egg-info/top_level.txt
+[1.771s] writing manifest file '../../build/robot_core/robot_core.egg-info/SOURCES.txt'
+[1.826s] reading manifest file '../../build/robot_core/robot_core.egg-info/SOURCES.txt'
+[1.826s] adding license file 'LICENSE'
+[1.827s] writing manifest file '../../build/robot_core/robot_core.egg-info/SOURCES.txt'
+[1.827s] running build
+[1.827s] running build_py
+[1.828s] creating /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build
+[1.828s] creating /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build/lib
+[1.828s] creating /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build/lib/robot_core
+[1.828s] copying robot_core/__init__.py -> /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build/lib/robot_core
+[1.828s] running install
+[1.841s] running install_lib
+[1.867s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages/robot_core
+[1.867s] copying /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build/lib/robot_core/__init__.py -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages/robot_core
+[1.867s] byte-compiling /home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages/robot_core/__init__.py to __init__.cpython-312.pyc
+[1.868s] running install_data
+[1.868s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/ament_index
+[1.868s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/ament_index/resource_index
+[1.868s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/ament_index/resource_index/packages
+[1.868s] copying resource/robot_core -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/ament_index/resource_index/packages
+[1.868s] copying package.xml -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core
+[1.869s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core/launch
+[1.869s] copying launch/rsp.launch.py -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core/launch
+[1.869s] creating /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core/urdf
+[1.869s] copying urdf/robot_core.xacro -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core/urdf
+[1.869s] copying urdf/robot.urdf.xacro -> /home/wie/Project/Robotics/dumb30-robot/install/robot_core/share/robot_core/urdf
+[1.869s] running install_egg_info
+[1.897s] Copying ../../build/robot_core/robot_core.egg-info to /home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages/robot_core-0.0.0-py3.12.egg-info
+[1.898s] running install_scripts
+[2.102s] writing list of installed files to '/home/wie/Project/Robotics/dumb30-robot/build/robot_core/install.log'
+[2.211s] Invoked command in '/home/wie/Project/Robotics/dumb30-robot/src/robot_core' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/wie/Project/Robotics/dumb30-robot/build/robot_core/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wie/Project/Robotics/dumb30-robot/install/robot_core/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/robot_core build --build-base /home/wie/Project/Robotics/dumb30-robot/build/robot_core/build install --record /home/wie/Project/Robotics/dumb30-robot/build/robot_core/install.log --single-version-externally-managed install_data
