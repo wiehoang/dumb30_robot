@@ -15,16 +15,16 @@ def generate_launch_description():
 
     # Process the URDF file
     pkg_path = os.path.join(get_package_share_directory("robot_core"))
-    xacro_file = os.path.join(pkg_path,"urdf",'robot.urdf.xacro')
-    robot_description_config = xacro.process_file(xacro_file)
+    xacro_file = os.path.join(pkg_path,"model",'robot.urdf.xacro')
+    robot_description_config = Command(['xacro ', xacro_file, ' sim_mode:=', use_sim_time])
     
     # Create a robot_state_publisher node
-    params = {"robot_description": robot_description_config.toxml(), "use_sim_time": use_sim_time}
     node_rsp = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="screen",
-        parameters=[params]
+        parameters=["robot_description": robot_description_config.toxml(),
+                    "use_sim_time": use_sim_time]
     )
 
     # Launch the file
