@@ -1,0 +1,6 @@
+# Laser Scan
+- ros_topic_name: "ros_laser"
+  gz_topic_name: "gz_laser"
+  ros_type_name: "sensor_msgs/msg/LaserScan"	
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: BIDIRECTIONAL
