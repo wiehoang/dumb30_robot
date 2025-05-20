@@ -21,6 +21,9 @@
     <color rgba="0 0 0 1"/>
   </material>
 
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
 
   <!-- BASE -->
   <link name="base_link"></link>
@@ -74,7 +77,6 @@
     <xacro:inertial_cylinder mass="0.115" radius="0.0325" length="0.027">
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:inertial_cylinder>
-
   </link>
 
   <joint name="right_wheel_joint" type="continuous">
@@ -123,4 +125,5 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:inertial_sphere>
   </link>
+
 </robot>
