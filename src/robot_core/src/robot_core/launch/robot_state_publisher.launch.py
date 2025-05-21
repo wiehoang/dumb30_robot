@@ -10,29 +10,29 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    # Check if we're told to use sim time
-    use_sim_time = LaunchConfiguration("use_sim_time")
+    # Launch use sim time to sync time with Gazebo
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Process the URDF file
-    pkg_path = os.path.join(get_package_share_directory("robot_core"))
-    xacro_file = os.path.join(pkg_path,"model",'robot.urdf.xacro')
+    pkg_path = os.path.join(get_package_share_directory('robot_core'))
+    xacro_file = os.path.join(pkg_path,'model','robot.urdf.xacro')
     robot_description_config = Command(['xacro ', xacro_file, ' sim_mode:=', use_sim_time])
     
-    # Create a robot_state_publisher node
-    node_rsp = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="screen",
-        parameters=["robot_description": robot_description_config.toxml(),
-                    "use_sim_time": use_sim_time]
-    )
-
-    # Launch the file
+    # Launch the file with sim time and rsp node
     return LaunchDescription([
         DeclareLaunchArgument(
-            "use_sim_time",
+            'use_sim_time',
             default_value="false",
-            description="Use sim time if true"),
-
-        node_rsp
+            description="Use sim time if true"
+        ),
+        
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            output="screen",
+            parameters=[
+                "robot_description": robot_description_config.toxml(),
+                "use_sim_time": use_sim_time
+            ]
+        )
     ])

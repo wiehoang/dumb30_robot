@@ -11,7 +11,8 @@
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
-
+  
+  <exec_depend>ros2launch</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>forward_command_controller</exec_depend>
   <exec_depend>gz_ros2_control</exec_depend>
