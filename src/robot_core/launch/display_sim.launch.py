@@ -27,17 +27,17 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('ros_gz_sim'),
             'launch',
-            'ros_gz_sim.launch.py')
+            'gz_sim.launch.py')
         ]),
         launch_arguments={
-            'use_sim_time': 'true'
-            'gz_args': ['-r -v 3 empty.sdf']
+            'use_sim_time': 'true',
+            'gz_args': [' -r -v 3 empty.sdf']
         }.items()
     )
 
     # Launch Gazebo bridge in ros_gz_bridge
     # Gazebo bridge config file
-    gz_bridge_config = os.path.join(get_package_share_directory(package_name),
+    gz_bridge_config = os.path.join(get_package_share_directory(pkg_name),
                                     'config', 'gz_bridge_params.yaml') 
     gz_bridge = Node(
         package='ros_gz_bridge',

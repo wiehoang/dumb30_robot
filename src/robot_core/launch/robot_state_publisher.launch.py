@@ -3,14 +3,12 @@ import xacro
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, Command
 from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
-    # Launch use sim time to sync time with Gazebo
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Process the URDF file
@@ -18,21 +16,20 @@ def generate_launch_description():
     xacro_file = os.path.join(pkg_path,'model','robot.urdf.xacro')
     robot_description_config = Command(['xacro ', xacro_file, ' sim_mode:=', use_sim_time])
     
-    # Launch the file with sim time and rsp node
+    # Launch the file
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
-            default_value="false",
-            description="Use sim time if true"
+            default_value='false',
+            description="Set to true to sync time with Gazebo"
         ),
-        
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
             output="screen",
-            parameters=[
-                "robot_description": robot_description_config.toxml(),
+            parameters=[{
+                "robot_description": robot_description_config,
                 "use_sim_time": use_sim_time
-            ]
+            }]
         )
     ])
