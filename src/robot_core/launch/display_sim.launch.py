@@ -8,10 +8,19 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 
 def generate_launch_description():
+    # Package name
     pkg_name='robot_core'
-    
+   
+    # Config paths
+    gz_bridge_config = os.path.join(get_package_share_directory(pkg_name),
+                                    'config', 'gz_bridge_params.yaml') # Gazebo bridge config
+    rviz_config = os.path.join(get_package_share_directory(pkg_name),
+                               'config', 'robot_view.rviz') # Rviz config
+    ros2_control_config = os.path.join(get_package_share_directory(pkg_name),
+                                       'config', 'robot_controller.yaml') # Ros2_control config
+ 
     # Launch robot_state_publisher
-    rsp = IncludeLaunchDescription(
+    robot_state_pub = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory(pkg_name),
             'launch',
@@ -22,7 +31,7 @@ def generate_launch_description():
         }.items()
     )
     
-    #Launch Gazebo in ros_gz_sim package
+    # Launch Gazebo
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('ros_gz_sim'),
@@ -35,11 +44,8 @@ def generate_launch_description():
         }.items()
     )
 
-    # Launch Gazebo bridge in ros_gz_bridge
-    # Gazebo bridge config file
-    gz_bridge_config = os.path.join(get_package_share_directory(pkg_name),
-                                    'config', 'gz_bridge_params.yaml') 
-    gz_bridge = Node(
+    # Gazebo bridge
+    gz_bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
@@ -48,8 +54,8 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Spawn model node in ros_gz_sim package
-    gz_spawn_model = Node(
+    # Spawn model node
+    gz_spawn_model_node = Node(
         package='ros_gz_sim',
         executable='create',
         output='screen',
@@ -62,10 +68,45 @@ def generate_launch_description():
         ]
     )
 
+    # Rviz2 node
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', rviz_config]
+    )
+
+    # ros2_control node
+    ros2_control_node = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        parameters=[ros2_control_config],
+        output='both'
+    )
+
+    # joint_state_broadcaster node
+    joint_state_broadcaster = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster']
+    )
+
+    # diff_drive_controller node
+    diff_drive_controller = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['diff_drive_controller', '--param-file', ros2_control_config]
+    )
+
     # Launch the file
     return LaunchDescription([
-        rsp,
+        robot_state_pub,
         gz_sim,
-        gz_bridge,
-        gz_spawn_model
+        gz_bridge_node,
+        gz_spawn_model_node,
+        rviz_node,
+        ros2_control_node,
+        joint_state_broadcaster,
+        diff_drive_controller
     ])
