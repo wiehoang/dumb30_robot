@@ -1,0 +1,14 @@
+controller_manager:
+  ros_parameters:
+    update_rate: 10
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    diff_drive_controller:
+      type: diff_drive_controller/diff_drive_controller
+
+diff_drive_controller:
+  ros_parameters:
+    joints:
+      - left_wheel_joint
+      - right_wheel_joint
+    interface_name: position
