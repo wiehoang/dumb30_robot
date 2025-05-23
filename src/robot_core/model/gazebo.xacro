@@ -6,4 +6,6 @@
       <parameters>$(find robot_core)/config/robot_controller.yaml</parameters>
     </plugin>
   </gazebo>
+
+
 </robot>

@@ -78,7 +78,7 @@ def generate_launch_description():
     )
 
     # ros2_control node
-    ros2_control_node = Node(
+    control_node = Node(
         package='controller_manager',
         executable='ros2_control_node',
         parameters=[ros2_control_config],
@@ -96,7 +96,7 @@ def generate_launch_description():
     diff_drive_controller = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller', '--param-file', ros2_control_config]
+        arguments=['diff_drive_controller', '--controller_manager', '/controller_manager']
     )
 
     # Launch the file
@@ -106,7 +106,7 @@ def generate_launch_description():
         gz_bridge_node,
         gz_spawn_model_node,
         rviz_node,
-        ros2_control_node,
+        control_node,
         joint_state_broadcaster,
         diff_drive_controller
     ])
