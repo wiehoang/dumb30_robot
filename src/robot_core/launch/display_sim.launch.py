@@ -1,37 +1,49 @@
 import os
+import xacro
 from ament_index_python import get_package_share_directory
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, Command
 
 
 def generate_launch_description():
     # Package name
     pkg_name='robot_core'
-   
+
     # Config paths
+    # config robot_description
+    xacro_file = os.path.join(get_package_share_directory(pkg_name),
+                              'model','robot.urdf.xacro')
+    robot_description_content = Command(['xacro ', xacro_file]) # Process URDF (xacro) to get robot_description string
+
     gz_bridge_config = os.path.join(get_package_share_directory(pkg_name),
                                     'config', 'gz_bridge_params.yaml') # Gazebo bridge config
     rviz_config = os.path.join(get_package_share_directory(pkg_name),
-                               'config', 'robot_view.rviz') # Rviz config
+                               'rviz', 'robot_view.rviz') # Rviz config
     ros2_control_config = os.path.join(get_package_share_directory(pkg_name),
                                        'config', 'robot_controller.yaml') # Ros2_control config
- 
-    # Launch robot_state_publisher
-    robot_state_pub = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            os.path.join(get_package_share_directory(pkg_name),
-            'launch',
-            'robot_state_publisher.launch.py')
-        ]),
-        launch_arguments={
-            'use_sim_time': 'true'
-        }.items()
-    )
+    world_path = os.path.join(get_package_share_directory(pkg_name), 'worlds', 'my_bedroom.sdf') 
     
-    # Launch Gazebo
+    # Launch args
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    world = LaunchConfiguration('world', default=world_path)
+
+    # robot_state_publisher node
+    robot_state_pub = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[{
+            'robot_description': robot_description_content,
+            'use_sim_time': use_sim_time
+        }]
+    )
+
+    # Launch Gazebo environment
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('ros_gz_sim'),
@@ -40,7 +52,8 @@ def generate_launch_description():
         ]),
         launch_arguments={
             'use_sim_time': 'true',
-            'gz_args': [' -r -v 3 empty.sdf']
+            'gz_args': [' -r -v3 ', world],
+            'on_exit_shutdonw': 'true'
         }.items()
     )
 
@@ -60,11 +73,10 @@ def generate_launch_description():
         executable='create',
         output='screen',
         arguments=[
-            '-topic',
-            '/robot_description',
-            '-name',
-            'robot_system_position',
-            'true'
+            '-topic', 'robot_description',
+            '-entity_name', 'dumb30_robot',
+            '-allow_renaming', 'true',
+            '-z', '0.1',
         ]
     )
 
@@ -74,17 +86,10 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', rviz_config]
+        arguments=['-d', rviz_config],
+        parameters=[{'use_sim_time': use_sim_time}]
     )
-
-    # ros2_control node
-    control_node = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        parameters=[ros2_control_config],
-        output='both'
-    )
-
+    
     # joint_state_broadcaster node
     joint_state_broadcaster = Node(
         package='controller_manager',
@@ -93,20 +98,30 @@ def generate_launch_description():
     )
 
     # diff_drive_controller node
-    diff_drive_controller = Node(
+    diff_drive_base_controller = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller', '--controller_manager', '/controller_manager']
+        arguments=[
+            'diff_drive_base_controller',
+            '--controller-ros-args', '-r diff_drive_base_controller/cmd_vel:=/cmd_vel',
+        ],
     )
 
     # Launch the file
     return LaunchDescription([
-        robot_state_pub,
+        DeclareLaunchArgument(
+            'use_sim_time', default_value='true',
+            description='Use simulation clock if true'
+        ),
+        DeclareLaunchArgument(
+            'world', default_value=world_path,
+            description='SDF world file'
+        ),
         gz_sim,
-        gz_bridge_node,
+        robot_state_pub,
         gz_spawn_model_node,
-        rviz_node,
-        control_node,
+        gz_bridge_node,
         joint_state_broadcaster,
-        diff_drive_controller
+        diff_drive_base_controller,
+        rviz_node,
     ])
