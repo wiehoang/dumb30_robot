@@ -24,15 +24,22 @@
     </xacro:inertial_cylinder>
   </link>
 
-  <!-- Gazebo ref -->
+  <!-- Gazebo sensor plugin -->
+  <gazebo>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+  </gazebo>
+  
+  <!-- Gazebo LiDAR config -->
   <gazebo reference="laser_frame">
     <sensor name="laser" type="gpu_lidar">
+      <gz_frame_id>laser_frame</gz_frame_id>
       <pose>0 0 0 0 0 0</pose>
       <always_on>true</always_on>
       <visualize>true</visualize>
       <update_rate>10</update_rate>
       <topic>scan</topic>
-      <gz_frame_id>laser_frame</gz_frame_id>
       <lidar>
         <scan>
           <horizontal>
