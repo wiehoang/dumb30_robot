@@ -1,11 +1,9 @@
 import os
-import xacro
 from ament_index_python import get_package_share_directory
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler
-from launch.event_handlers import OnProcessExit
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
 
@@ -24,13 +22,11 @@ def generate_launch_description():
                                     'config', 'gz_bridge_params.yaml') # Gazebo bridge config
     rviz_config = os.path.join(get_package_share_directory(pkg_name),
                                'rviz', 'robot_view.rviz') # Rviz config
-    ros2_control_config = os.path.join(get_package_share_directory(pkg_name),
-                                       'config', 'robot_controller.yaml') # Ros2_control config
     world_path = os.path.join(get_package_share_directory(pkg_name), 'worlds', 'my_bedroom.sdf') 
     
     # Launch args
-    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    world = LaunchConfiguration('world', default=world_path)
+    use_sim_time = LaunchConfiguration('use_sim_time')
+    world = LaunchConfiguration('world')
 
     # robot_state_publisher node
     robot_state_pub = Node(
@@ -51,9 +47,9 @@ def generate_launch_description():
             'gz_sim.launch.py')
         ]),
         launch_arguments={
-            'use_sim_time': 'true',
+            'use_sim_time': use_sim_time,
             'gz_args': [' -r -v3 ', world],
-            'on_exit_shutdonw': 'true'
+            'on_exit_shutdown': 'true'
         }.items()
     )
 
